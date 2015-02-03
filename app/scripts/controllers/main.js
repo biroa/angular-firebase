@@ -17,17 +17,17 @@ angular.module('publicHtmlApp')
 		user: 'Adam',
 		text: 'Hi'
 	    })
-	}
-`	//update can only update property
-	// set always overwrite the existing object
+	};
+	//update can only update
+	//set always overwrite the existing object
 	$scope.updateMessage = function(){
 	    childRef.update({
 		text:'Bye'
 	    })
-	}
+	};
 
 	$scope.deleteMessage = function(){
 	    childRef.remove()
-	}
+	};
 
   });
