@@ -23,8 +23,23 @@ angular.module('publicHtmlApp')
 	});
 
 	//With on we check firebase on realtime
+	//
 	childRef.on('value',function(snapshot){
 	    $timeout(function(){
+
+		//Available properties
+		//console.log(snapshot.name());
+		//console.log(snapshot.numChildren());
+		//console.log(snapshot.hasChild('text'));
+		//console.log(snapshot.hasChildren());
+		
+		snapshot.forEach(function(item){
+		    console.log(item.key() +'-'+ item.val());
+		    //eg. get data(image) from the certain point of the time
+		    console.log(item.ref());
+		});
+		
+		//data from the given period of time from firebase
 		var snapshotVal = snapshot.val();
 		console.log(snapshotVal);
 		$scope.message = snapshot.val();
