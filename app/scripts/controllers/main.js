@@ -14,11 +14,16 @@ angular.module('publicHtmlApp')
 	
 	$scope.currentUser = null;
 	$scope.currentText = null;
+	$scope.messages = [];
 
-	messagesRef.on('value',function(snapshot){
+	//value -> all items
+	//child_added -> on first load get all data after that get only the last item when add someone a new item
+	//with new child added we save exponentially increasing load that would cause value
+	// with
+	messagesRef.on('child_added',function(snapshot){
 	    $timeout(function(){
 		var snapshotVal = snapshot.val();
-		$scope.messages = snapshot.val();
+		$scope.messages.push(snapshotVal);
 	    });
 	});
 
