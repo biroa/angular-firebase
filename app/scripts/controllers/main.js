@@ -23,20 +23,59 @@ angular.module('publicHtmlApp')
 	messagesRef.on('child_added',function(snapshot){
 	    $timeout(function(){
 		var snapshotVal = snapshot.val();
-		$scope.messages.push(snapshotVal);
+		$scope.messages.push({
+			text: snapshotVal.text,
+			user: snapshotVal.user,
+			key: snapshot.key()
+			}
+			);
 	    });
 	});
 
-	$scope.sendMessage = function(){
-	    var newMessage = {
-		user: $scope.currentUser,
-		text: $scope.currentText
-	    };
-	    //set allows to control the name
-	    //push create a unique name
-	    messagesRef.push(newMessage);
-	    
-	}
-	
+		messagesRef.on('child_changed', function(snapshot) {
+			$timeout(function() {
+				var snapshotVal = snapshot.val();
+				var message = findMessageByName(snapshot.key());
+				message.text = snapshotVal.text;
+			});
+		});
 
-  });
+		messagesRef.on('child_removed', function(snapshot) {
+			$timeout(function() {
+				deleteMessageByName(snapshot.key());
+			});
+		});
+
+		function deleteMessageByName(keyID) {
+			for(var i=0; i < $scope.messages.length; i++) {
+				var currentMessage = $scope.messages[i];
+				if (currentMessage.key === keyID) {
+					delete $scope.messages[i];
+					break;
+				}
+			}
+		}
+
+		function findMessageByName(keyID) {
+			var messageFound = null;
+			for(var i=0; i < $scope.messages.length; i++) {
+				var currentMessage = $scope.messages[i];
+				if (currentMessage.key === keyID) {
+					messageFound = currentMessage;
+					break;
+				}
+			}
+
+			return messageFound;
+		}
+
+		$scope.sendMessage = function() {
+			var newMessage = {
+				user: $scope.currentUser,
+				text: $scope.currentText
+			};
+
+			messagesRef.push(newMessage);
+		};
+
+	});
