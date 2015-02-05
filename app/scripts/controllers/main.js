@@ -88,6 +88,6 @@ angular.module('publicHtmlApp')
 		$scope.turnFeedOff = function(){
 			//we do not get any data
 			console.log('turned off');
-			messagesRef.off;
+			messagesRef.off();
 		}
 	});
