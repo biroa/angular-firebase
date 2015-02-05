@@ -11,10 +11,20 @@ angular.module('publicHtmlApp')
 	  .controller('MainCtrl', function ($scope,$timeout) {
 		var rootRef = new Firebase('https://glaring-torch-7103.firebaseio.com/messages');
 		var messagesRef = rootRef.child('messages');
+		var titleRef = rootRef.child('title');
 
-		$scope.currentUser = null;
-		$scope.currentText = null;
-		$scope.messages = [];
+		$scope.title 		= 	null;
+		$scope.currentUser 	= 	null;
+		$scope.currentText 	= 	null;
+		$scope.messages 	= 	[];
+
+		//Solution for not changing data
+		//We can use once instead on + off so it will
+		// refresh the data one
+		titleRef.once('value',function(snapshot){
+			$scope.title = snapshot.val();
+			//titleRef.off();
+		});
 
 		//value -> all items
 		//child_added -> on first load get all data after that get only the last item when add someone a new item
