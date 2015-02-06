@@ -8,7 +8,7 @@
  * Controller of the publicHtmlApp
  */
 angular.module('publicHtmlApp')
-	  .controller('MainCtrl', function ($scope,$timeout) {
+	  .controller('MainCtrl', function ($scope, $timeout, MessageService) {
 		var rootRef = new Firebase('https://glaring-torch-7103.firebaseio.com/messages');
 		var messagesRef = rootRef.child('messages');
 		var titleRef = rootRef.child('title');
@@ -25,6 +25,10 @@ angular.module('publicHtmlApp')
 			$scope.title = snapshot.val();
 			//titleRef.off();
 		});
+
+		MessageService.childAdded(function(addedChild){
+			console.log(addedChild);
+		})
 
 		//value -> all items
 		//child_added -> on first load get all data after that get only the last item when add someone a new item

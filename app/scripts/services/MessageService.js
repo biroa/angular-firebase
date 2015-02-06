@@ -2,12 +2,17 @@
 (function(angular){
     'use strict'
 
-    angular.modules('firebaseApp').service('MessageService',function(FBURL){
-        var messageRef = new Firebaase(FBURL);
+    angular.module('publicHtmlApp').service('MessageService',function(FBURL){
+        var messageRef = new Firebase(FBURL).child('messages');
         return{
             childAdded: function(cb){
                 messageRef.on('child_added',function(snapshot){
-                    cb.call(this,snapshot.val());
+                    var val = snapshot.val();
+                    cb.call(this, {
+                        user: val.user,
+                        text: val.text,
+                        key: val.key()
+                    });
                 });
             }
         }
