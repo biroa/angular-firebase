@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('publicHtmlApp')
-    .controller('MainCtrl', function ($scope, $timeout, MessageService) {
+    .controller('MainCtrl', function($scope, $timeout, MessageService) {
 
         $scope.currentUser = null;
         $scope.currentText = null;
         $scope.messages = [];
 
-        MessageService.childAdded(10, function (addedChild) {
+        MessageService.childAdded(function (addedChild) {
             $timeout(function () {
                 $scope.messages.push(addedChild);
             });
