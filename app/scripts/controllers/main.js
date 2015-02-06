@@ -2,12 +2,13 @@
 
 angular.module('publicHtmlApp')
     .controller('MainCtrl', function($scope, $timeout, MessageService) {
-
+        var ChildNum = 4;
         $scope.currentUser = null;
         $scope.currentText = null;
         $scope.messages = [];
 
-        MessageService.childAdded(function (addedChild) {
+
+        MessageService.childAdded(ChildNum ,function (addedChild) {
             $timeout(function () {
                 $scope.messages.push(addedChild);
             });
