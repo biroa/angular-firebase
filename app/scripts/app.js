@@ -30,4 +30,6 @@ angular
       .otherwise({
         redirectTo: '/'
       });
-  });
+  })
+
+.constant('FBURL','https://glaring-torch-7103.firebaseio.com/messages');
