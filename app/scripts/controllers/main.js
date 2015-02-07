@@ -27,4 +27,11 @@ angular.module('publicHtmlApp')
             MessageService.off();
         };
 
+        $scope.pageNext = function(){
+            var lastItem = $scope.messages[$scope.messages.length-1];
+            MessageService.pageNext(lastItem.key,ChildNum).then(function(messages){
+                console.log(messages);
+            });
+        }
+
     });

@@ -2,7 +2,7 @@
 (function(angular) {
     'use strict';
 
-    angular.module('publicHtmlApp').service('MessageService', function(FBURL) {
+    angular.module('publicHtmlApp').service('MessageService', function(FBURL, $q) {
         var messageRef = new Firebase(FBURL).child('messages');
         return {
             childAdded: function childAdded(limitNumber,cb) {
@@ -24,6 +24,22 @@
             },
             off: function turnMessagesOff() {
                 messageRef.off();
+            },
+            pageNext: function pageNext(key,numberOfItem){
+                var deferred = $q.defer();
+                var messages = [];
+                messageRef.startAt(null,key).limitToFirst(numberOfItem).once('value', function(snapshot){
+                   snapshot.forEach(function(snapItem){
+                       var itemVal = snapItem.val();
+                       itemVal.key = snapItem.key();
+                       messages.push(itemVal);
+                   });
+                    deferred.resolve(messages);
+                });
+                return deferred.promise;
+            },
+            pageBack: function pageBack(key,numberOfItem){
+
             }
         };
     });
