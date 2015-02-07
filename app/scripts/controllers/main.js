@@ -30,7 +30,14 @@ angular.module('publicHtmlApp')
         $scope.pageNext = function(){
             var lastItem = $scope.messages[$scope.messages.length-1];
             MessageService.pageNext(lastItem.key,ChildNum).then(function(messages){
-                console.log(messages);
+               $scope.messages= messages;
+            });
+        };
+
+        $scope.pageBack = function(){
+            var firstItem = $scope.messages[0];
+            MessageService.pageBack(firstItem.key,ChildNum).then(function(messages){
+                $scope.messages= messages;
             });
         }
 
