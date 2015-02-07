@@ -2,8 +2,9 @@
 (function(angular) {
     'use strict';
 
-    angular.module('publicHtmlApp').service('MessageService', function(FBURL, $q) {
+    angular.module('publicHtmlApp').service('MessageService', function(FBURL, $q, $firebase) {
         var messageRef = new Firebase(FBURL).child('messages');
+        var fireMessage = $firebase(messageRef);
         return {
             childAdded: function childAdded(limitNumber,cb) {
                 //limit retrieve the last x items: limitToFirst(x)
