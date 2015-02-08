@@ -28,9 +28,25 @@ angular
                 templateUrl: 'views/about.html',
                 controller: 'AboutCtrl'
             })
+            .when('/chat', {
+                templateUrl: 'views/chat.html',
+                controller: 'ChatCtrl'
+            })
+            .when('/login', {
+                templateUrl: 'views/login.html',
+                controller: 'LoginCtrl'
+            })
+            .when('/register', {
+                templateUrl: 'views/register.html',
+                controller: 'RegisterCtrl'
+            })
+            .when('/logout', {
+                template: 'Logging out...',
+                controller: 'LogoutCtrl'
+            })
             .otherwise({
                 redirectTo: '/'
             });
     })
-
-    .constant('FBURL', 'https://glaring-torch-7103.firebaseio.com/messages');
+    .constant('FBURL', 'https://brilliant-fire-2753.firebaseio.com/')
+    .constant('MSG_URL', 'https://brilliant-fire-2753.firebaseio.com/messages');

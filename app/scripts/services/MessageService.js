@@ -2,54 +2,58 @@
 (function(angular) {
     'use strict';
 
-    angular.module('publicHtmlApp').service('MessageService', function(FBURL, $q, $firebase) {
-        var messageRef = new Firebase(FBURL).child('messages');
-        var fireMessage = $firebase(messageRef);
+    angular.module('publicHtmlApp').service('MessageService', function(MSG_URL, $q, $firebase) {
+        var messageRef = new Firebase(MSG_URL).startAt().limitToFirst(10);
+        var fireMessage = $firebase(messageRef).$asObject();
         return {
-            childAdded: function childAdded(limitNumber,cb) {
-                //limit retrieve the last x items: limitToFirst(x)
-                //limit retrieve the last x items: limitToLast(x)
-                //startAt() modifies it to the first x = key(): startAt(priority,key())
-                //endAt()
-                messageRef.startAt(null,'-JhLhFJgVT1756I7BrbC').endAt(null,'-JhLhFJgVT1756I7BrbC').on('child_added', function(snapshot) {
-                    var val = snapshot.val();
+            childAdded: function childAdded(cb) {
+                fireMessage.$on('child_added', function(data) {
+                    var val = data.snapshot.value;
                     cb.call(this, {
                         user: val.user,
                         text: val.text,
-                        key: snapshot.key()
+                        name: data.snapshot.name
                     });
                 });
             },
             add: function addMessage(message) {
-                messageRef.push(message);
+                return fireMessage.$add(message);
             },
             off: function turnMessagesOff() {
-                messageRef.off();
+                fireMessage.$off();
             },
-            pageNext: function pageNext(key,numberOfItem){
+            pageNext: function pageNext(name, numberOfItems) {
                 var deferred = $q.defer();
                 var messages = [];
-                messageRef.startAt(null,key).limitToFirst(numberOfItem).once('value', function(snapshot){
-                    snapshot.forEach(function(snapItem){
-                        var itemVal = snapItem.val();
-                        itemVal.key = snapItem.key();
-                        messages.push(itemVal);
+                var pageMessageRef = new Firebase(MSG_URL).startAt(null, name).limitToFirst(numberOfItems);
+
+                $firebase(pageMessageRef).$on('loaded', function(data) {
+                    var keys = Object.keys(data);
+                    angular.forEach(keys, function(key) {
+                        var item = data[key];
+                        item.name = key;
+                        messages.push(item);
                     });
                     deferred.resolve(messages);
                 });
+
                 return deferred.promise;
             },
-            pageBack: function pageBack(key,numberOfItem){
+            pageBack: function pageBack(name, numberOfItems) {
                 var deferred = $q.defer();
                 var messages = [];
-                messageRef.endAt(null,key).limitToFirst(numberOfItem).once('value', function(snapshot){
-                    snapshot.forEach(function(snapItem){
-                        var itemVal = snapItem.val();
-                        itemVal.key = snapItem.key();
-                        messages.push(itemVal);
+                var pageMessageRef = new Firebase(MSG_URL).endAt(null, name).limitToLast(numberOfItems);
+
+                $firebase(pageMessageRef).$on('loaded', function(data) {
+                    var keys = Object.keys(data);
+                    angular.forEach(keys, function(key) {
+                        var item = data[key];
+                        item.name = key;
+                        messages.push(item);
                     });
                     deferred.resolve(messages);
                 });
+
                 return deferred.promise;
             }
         };
