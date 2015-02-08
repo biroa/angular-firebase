@@ -30,11 +30,11 @@
                 var deferred = $q.defer();
                 var messages = [];
                 messageRef.startAt(null,key).limitToFirst(numberOfItem).once('value', function(snapshot){
-                    snapshot.forEach(function(snapItem){
-                        var itemVal = snapItem.val();
-                        itemVal.key = snapItem.key();
-                        messages.push(itemVal);
-                    });
+                   snapshot.forEach(function(snapItem){
+                       var itemVal = snapItem.val();
+                       itemVal.key = snapItem.key();
+                       messages.push(itemVal);
+                   });
                     deferred.resolve(messages);
                 });
                 return deferred.promise;
