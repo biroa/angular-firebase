@@ -46,7 +46,7 @@ angular.module('publicHtmlApp')
 			//we do not get any data
 			console.log('turned off');
 			messagesRef.off;
-		}
+		};
 
 
 		messagesRef.on('child_changed', function(snapshot) {
